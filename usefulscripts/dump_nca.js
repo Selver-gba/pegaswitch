@@ -54,14 +54,13 @@ sc.getService("fsp-pr", (fsppr) => {
 	sc.write4(0xFFFFFFFF, buf2, 0x24 >> 2);
 	sc.write4(0xFFFFFFFF, buf2, 0x28 >> 2);
 	
-    /* Change to mount a particular title's romfs */
+	/* Change to mount a particular title's romfs */
 	var tid = '0000000000000000';
 	
 	sc.ipcMsg(256).data(0).sendTo(fsppr).assertOk().show();
 	sc.ipcMsg(1).data(pid).sendTo(fsppr).assertOk().show();
 	sc.ipcMsg(0).data(2, [pid,0], utils.parseAddr(tid), buf1_sz, buf2_sz, pid, pid, 0, 0, 0, 0, 0).aDescriptor(buf, buf1_sz).aDescriptor(buf2, buf2_sz).sendTo(fsppr).assertOk().show();
 	sc.free(buf);
-	sc.free(buf2);
 });
 
 dumpNCA = function(nca_id, ncm_hnd, sd_hnd, file_path, is_exfat) {
@@ -69,10 +68,10 @@ dumpNCA = function(nca_id, ncm_hnd, sd_hnd, file_path, is_exfat) {
 		is_exfat = false;
 	}
 	sc.withHandle(ncm_hnd, () => {
-        // var size = GetRegisteredEntrySize();
-        var size = sc.ipcMsg(14).datau32(nca_id[0], nca_id[1], nca_id[2], nca_id[3]).sendTo(ncm_hnd).assertOk();
-        size = [size.data[0], size.data[1]];
-        utils.log('NCA size: '+utils.paddr(size));
+		// var size = GetRegisteredEntrySize();
+		var size = sc.ipcMsg(14).datau32(nca_id[0], nca_id[1], nca_id[2], nca_id[3]).sendTo(ncm_hnd).assertOk();
+		size = [size.data[0], size.data[1]];
+		utils.log('NCA size: '+utils.paddr(size));
 		var two_gigs = 0x80000000 >>> 0;
 
 		var outbuf = new ArrayBuffer(0x1000000);
@@ -99,8 +98,8 @@ dumpNCA = function(nca_id, ncm_hnd, sd_hnd, file_path, is_exfat) {
 				utils.log('Final block!');
 			}
 
-            // var data = ReadRegisteredEntry();
-            sc.ipcMsg(18).datau32(nca_id[0], nca_id[1], nca_id[2], nca_id[3], offset[0], offset[1]).bDescriptor(outbuf, buf_sz).sendTo(ncm_hnd).assertOk().show();
+			// var data = ReadRegisteredEntry();
+			sc.ipcMsg(18).datau32(nca_id[0], nca_id[1], nca_id[2], nca_id[3], offset[0], offset[1]).bDescriptor(outbuf, buf_sz).sendTo(ncm_hnd).assertOk().show();
 			writeBufferToFile(f_hnd, ofs_in_file, outbuf, buf_sz);
 
 			offset = utils.add2(offset, buf_sz);
@@ -184,7 +183,7 @@ dumpIFile = function(ifl_hnd, sd_hnd, file_path, is_exfat) {
 		}
 		sc.ipcMsg(2).sendTo(f_hnd).assertOk();
 		sc.svcCloseHandle(f_hnd).assertOk();
-        sc.ipcMsg(2).sendTo(ifl_hnd).assertOk();
+		sc.ipcMsg(2).sendTo(ifl_hnd).assertOk();
 	});
 };
 
@@ -216,7 +215,7 @@ createDirectory = function(ifs_hnd, path) {
 	utils.log('Create '+path+': ');
 	res.show();
 
-}
+};
 
 writeBufferToFile = function(f_hnd, offset, buf, sz) {
 	sc.ipcMsg(1).aDescriptor(buf, sz, 1).data([0,0], utils.pad64(offset), utils.trunc32(sz)).sendTo(f_hnd).show().assertOk();
@@ -256,28 +255,28 @@ var TITLE_STORAGE = STORAGE_NANDSYS;
 /* Get the desired NCA ID */
 var nca_id = new Uint32Array(4);
 sc.ipcMsg(5).datau32(TITLE_STORAGE).sendTo('ncm').asResult().andThen(res => {
-    sc.withHandle(res.movedHandles[0], function(hnd) {
-        // var meta_record = GetMetaRecord(TITLE_ID);
-        var res = sc.ipcMsg(6).datau64(utils.parseAddr(TITLE_ID)).sendTo(hnd).assertOk();
-        // var nca_id = GetEntryContentNcaId(meta_record, TITLE_TYPE);
-        res = sc.ipcMsg(3).datau32(TITLE_TYPE, 0, res.data[0], res.data[1], res.data[2], res.data[3]).sendTo(hnd).assertOk();
-        for (var i = 0; i < 4; i++) {
-            nca_id[i] = res.data[i];
-        }
-    });
+	sc.withHandle(res.movedHandles[0], function(hnd) {
+		// var meta_record = GetMetaRecord(TITLE_ID);
+		var res = sc.ipcMsg(6).datau64(utils.parseAddr(TITLE_ID)).sendTo(hnd).assertOk();
+		// var nca_id = GetEntryContentNcaId(meta_record, TITLE_TYPE);
+		res = sc.ipcMsg(3).datau32(TITLE_TYPE, 0, res.data[0], res.data[1], res.data[2], res.data[3]).sendTo(hnd).assertOk();
+		for (var i = 0; i < 4; i++) {
+			nca_id[i] = res.data[i];
+		}
+	});
 });
 
 // Get NCA string for pretty printing.
 var nca_id_str = '';
 for (var i = 0; i < 4; i++) {
-    var val = nca_id[i];
-    for (var j = 0; j < 4; j++) {
-        var b = (val >> (j*8)) & 0xFF;
-        nca_id_str += ('00' + b.toString(16)).slice(-2);
-    }
+	var val = nca_id[i];
+	for (var j = 0; j < 4; j++) {
+		var b = (val >> (j*8)) & 0xFF;
+		nca_id_str += ('00' + b.toString(16)).slice(-2);
+	}
 }
 if (TITLE_TYPE == TYPE_CNMT) {
-    nca_id_str += '.cnmt';
+	nca_id_str += '.cnmt';
 }
 nca_id_str += '.nca';
 
@@ -289,60 +288,60 @@ sc.getService('fsp-srv', (hnd) => {
 	utils.log("initialized fsp-srv");
 
 
-    try {
-        var sd_mnt = sc.ipcMsg(18).sendTo(hnd).assertOk();
-    } catch(e) {
-        throw new Error("Failed to open SD card. Is it inserted?");
-    }
+	try {
+		var sd_mnt = sc.ipcMsg(18).sendTo(hnd).assertOk();
+	} catch(e) {
+		throw new Error("Failed to open SD card. Is it inserted?");
+	}
 
 	utils.log("Opened SD card.");
     
-    if (TITLE_STORAGE == STORAGE_GAMECARD) {
-        utils.log('Getting gamecard handle...');
-        var ido_res = sc.ipcMsg(400).sendTo(hnd).assertOk();
-        var gc_hnd = undefined;
-        sc.withHandle(ido_res.movedHandles[0], (ido_hnd) => {
-            gc_hnd = sc.ipcMsg(202).sendTo(ido_hnd).assertOk().data[0];
-        });
-        utils.log('Gamecard handle: '+gc_hnd);
-        sd_mnt.withHandles((r, m, c) => {
-            var sd_hnd = m[0];
-            var nca_id_path = '/ncas';
-            createDirectory(sd_hnd, nca_id_path);
-            nca_id_path += '/'+['None', 'Host', 'Gamecard', 'System', 'User', 'Sdcard'][TITLE_STORAGE];
-            createDirectory(sd_hnd, nca_id_path);
-            nca_id_path += '/'+TITLE_ID;
-            createDirectory(sd_hnd, nca_id_path);
-            nca_id_path += '/'+nca_id_str;
-            var res = sc.ipcMsg(31).datau32(gc_hnd, 2).sendTo(hnd).show().asResult();
-            if (res.isOk) {  
-                res = res.getValue();
-                sc.withHandle(res.movedHandles[0], (gc_fs_hnd) => {
-                    var nca_hnd = openReadFile(gc_fs_hnd, '/'+nca_id_str);
-                    dumpIFile(nca_hnd, sd_hnd, nca_id_path, false);
-                });
-            } else {
-                utils.log('Failed to mount gamecard secure partition!');
-            }
-        });
-    } else {
-        /* Dump the desired NCA */
-        sc.ipcMsg(4).datau32(TITLE_STORAGE).sendTo('ncm').asResult().andThen(res => {
-            sc.withHandle(res.movedHandles[0], function(ncm_hnd) {
-                sd_mnt.withHandles((r, m, c) => {
-                    var sd_hnd = m[0];
-                    var nca_id_path = '/ncas';
-                    createDirectory(sd_hnd, nca_id_path);
-                    nca_id_path += '/'+['None', 'Host', 'Gamecard', 'System', 'User', 'Sdcard'][TITLE_STORAGE];
-                    createDirectory(sd_hnd, nca_id_path);
-                    nca_id_path += '/'+TITLE_ID;
-                    createDirectory(sd_hnd, nca_id_path);
-                    nca_id_path += '/'+nca_id_str;
-                    dumpNCA(nca_id, ncm_hnd, sd_hnd, nca_id_path, false);
-                });
-            });
-        }); 
-    }
+	if (TITLE_STORAGE == STORAGE_GAMECARD) {
+		utils.log('Getting gamecard handle...');
+		var ido_res = sc.ipcMsg(400).sendTo(hnd).assertOk();
+		var gc_hnd = undefined;
+		sc.withHandle(ido_res.movedHandles[0], (ido_hnd) => {
+			gc_hnd = sc.ipcMsg(202).sendTo(ido_hnd).assertOk().data[0];
+		});
+		utils.log('Gamecard handle: '+gc_hnd);
+		sd_mnt.withHandles((r, m, c) => {
+			var sd_hnd = m[0];
+			var nca_id_path = '/ncas';
+			createDirectory(sd_hnd, nca_id_path);
+			nca_id_path += '/'+['None', 'Host', 'Gamecard', 'System', 'User', 'Sdcard'][TITLE_STORAGE];
+			createDirectory(sd_hnd, nca_id_path);
+			nca_id_path += '/'+TITLE_ID;
+			createDirectory(sd_hnd, nca_id_path);
+			nca_id_path += '/'+nca_id_str;
+			var res = sc.ipcMsg(31).datau32(gc_hnd, 2).sendTo(hnd).show().asResult();
+			if (res.isOk) {  
+				res = res.getValue();
+				sc.withHandle(res.movedHandles[0], (gc_fs_hnd) => {
+					var nca_hnd = openReadFile(gc_fs_hnd, '/'+nca_id_str);
+					dumpIFile(nca_hnd, sd_hnd, nca_id_path, false);
+				});
+			} else {
+				utils.log('Failed to mount gamecard secure partition!');
+			}
+		});
+	} else {
+		/* Dump the desired NCA */
+		sc.ipcMsg(4).datau32(TITLE_STORAGE).sendTo('ncm').asResult().andThen(res => {
+			sc.withHandle(res.movedHandles[0], function(ncm_hnd) {
+				sd_mnt.withHandles((r, m, c) => {
+					var sd_hnd = m[0];
+					var nca_id_path = '/ncas';
+					createDirectory(sd_hnd, nca_id_path);
+					nca_id_path += '/'+['None', 'Host', 'Gamecard', 'System', 'User', 'Sdcard'][TITLE_STORAGE];
+					createDirectory(sd_hnd, nca_id_path);
+					nca_id_path += '/'+TITLE_ID;
+					createDirectory(sd_hnd, nca_id_path);
+					nca_id_path += '/'+nca_id_str;
+					dumpNCA(nca_id, ncm_hnd, sd_hnd, nca_id_path, false);
+				});
+			});
+		}); 
+	}
     
 
 

@@ -54,14 +54,13 @@ sc.getService("fsp-pr", (fsppr) => {
 	sc.write4(0xFFFFFFFF, buf2, 0x24 >> 2);
 	sc.write4(0xFFFFFFFF, buf2, 0x28 >> 2);
 	
-    /* Change to mount a particular title's romfs */
+	/* Change to mount a particular title's romfs */
 	var tid = '0000000000000000';
 	
 	sc.ipcMsg(256).data(0).sendTo(fsppr).assertOk().show();
 	sc.ipcMsg(1).data(pid).sendTo(fsppr).assertOk().show();
 	sc.ipcMsg(0).data(2, [pid,0], utils.parseAddr(tid), buf1_sz, buf2_sz, pid, pid, 0, 0, 0, 0, 0).aDescriptor(buf, buf1_sz).aDescriptor(buf2, buf2_sz).sendTo(fsppr).assertOk().show();
 	sc.free(buf);
-	sc.free(buf2);
 });
 
 dumpIStorage = function(ist_hnd, sd_hnd, file_path, is_exfat) {
@@ -185,15 +184,15 @@ sc.getService('fsp-srv', (hnd) => {
 		30 : 'USER',
 		31 : 'SYSTEM1',
 		32 : 'SYSTEM2',
-	}
+	};
 
 	// var partitions = [0, 10]; // Package1 + Keyblobs
 	// var partitions = [21, 22, 24, 25, 25, 26]; // Package2s
 	// var partitions = [27, 28, 31]; // SYSTEM1 + Calibration
 	 var partitions = [32]; // SYSTEM2
 	// var partitions = [20]; // Raw NAND
-    // var partitions = [0, 10, 21];
-    // var partitions = [0, 10, 27]; // PK11, blobz, cal0
+	// var partitions = [0, 10, 21];
+	// var partitions = [0, 10, 27]; // PK11, blobz, cal0
 
 	sd_mnt.withHandles((r, m, c) => {
 		var sd_hnd = m[0];
