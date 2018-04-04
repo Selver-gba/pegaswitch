@@ -276,7 +276,7 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		(arguments.length >= 4) && // and argument was provided for gamecardPartitionInput
 		(gamecardPartitionInput.constructor === Number) && // and that argument was a number
 		(gamecardPartitionInput >= 0) && (gamecardPartitionInput <= 2)) ? gamecardPartitionInput : 2;
-	/*
+
 	// fsp-pr is the program registry... used to set full permissions on the titleId / titleStorage
 	sc.getService("fsp-pr", (fsppr) => {
 		// get the PID using fsp-srv
@@ -330,7 +330,7 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		setPermissionsMessage.show().sendTo(fsppr).assertOk().show();
 		sc.free(buf);
 	});
-	*/
+	
 	/*
 	// Get the desired NCA ID
 	var nca_id = new Uint32Array(4);
