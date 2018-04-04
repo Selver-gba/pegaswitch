@@ -245,20 +245,20 @@ const TITLE_ID_NAMES = {
 
 // Actual function start...
 dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPartitionInput) {
-	var titleId = titleIdInput;
-	var titleType = titleTypeInput;
-	var titleStorage = titleStorageInput;
+	const titleId = titleIdInput;
+	const titleType = titleTypeInput;
+	const titleStorage = titleStorageInput;
 	if (true) { // parameter validation
 		if (arguments.length !== 3) {
 			const errMsg = 'dumpTitle requires three arguments';
 			utils.log(errMsg); throw new Error(errMsg);		
 		}
-		if (titleID.constructor !== String) {
-			const errMsg = 'titleID must be hex string (e.g. 0100000000010000)';
+		if (titleId.constructor !== String) {
+			const errMsg = 'titleId must be hex string (e.g. 0100000000010000)';
 			utils.log(errMsg); throw new Error(errMsg);
 		}
-		if (titleID.length !== 16) {
-			const errMsg = 'titleID must be hex string (e.g. 0100000000010000)';
+		if (titleId.length !== 16) {
+			const errMsg = 'titleId must be hex string (e.g. 0100000000010000)';
 			utils.log(errMsg); throw new Error(errMsg);
 		}
 		if ((titleType.constructor !== Number) || (titleType < 0) || (titleType > 5)) {
@@ -271,13 +271,13 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		}
 	} // end parameter validation
 	// default gamecard partition is 2 (secure)
-	var gamecardParititon = (
+	const gamecardParititon = (
 		(titleStorage === 2) && // titleStorage is the gamecard...
 		(arguments.length >= 4) && // and argument was provided for gamecardPartitionInput
 		(gamecardPartitionInput.constructor === Number) && // and that argument was a number
 		(gamecardPartitionInput >= 0) && (gamecardPartitionInput <= 2)) ? gamecardPartitionInput : 2;
 	/*
-	// fsp-pr is the program registry... used to set full permissions on the titleID / titleStorage
+	// fsp-pr is the program registry... used to set full permissions on the titleId / titleStorage
 	sc.getService("fsp-pr", (fsppr) => {
 		// get the PID using fsp-srv
 		const pid = sc.getService('fsp-srv', (tmp_hnd) => {
