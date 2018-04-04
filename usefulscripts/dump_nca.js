@@ -214,7 +214,6 @@ const STORAGE_NANDSYS = 3;
 const STORAGE_NANDUSER = 4;
 const STORAGE_SDCARD = 5;
 
-/*
 // Configure these as desired.
 // See, for example, http://switchbrew.org/index.php?title=Title_list/Games
 const TITLE_ID_NAMES = {
@@ -277,10 +276,7 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		(arguments.length >= 4) && // and argument was provided for gamecardPartitionInput
 		(gamecardPartitionInput.constructor === Number) && // and that argument was a number
 		(gamecardPartitionInput >= 0) && (gamecardPartitionInput <= 2)) ? gamecardPartitionInput : 2;
-			
-
-
-
+	/*
 	// fsp-pr is the program registry... used to set full permissions on the titleID / titleStorage
 	sc.getService("fsp-pr", (fsppr) => {
 		// get the PID using fsp-srv
@@ -334,7 +330,8 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		setPermissionsMessage.show().sendTo(fsppr).assertOk().show();
 		sc.free(buf);
 	});
-
+	*/
+	/*
 	// Get the desired NCA ID
 	var nca_id = new Uint32Array(4);
 	sc.ipcMsg(5).datau32(titleStorage).sendTo('ncm').asResult().andThen(res => {
@@ -356,7 +353,8 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 			}
 		});
 	});
-
+	*/
+	/*
 	// Get NCA string for pretty printing.
 	var nca_id_str = '';
 	if (true) {
@@ -373,7 +371,8 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		nca_id_str += '.nca';
 	}
 	utils.log('Found NCA: '+nca_id_str);
-
+	*/
+	/*
 	// Get handle to SD card
 	sc.getService('fsp-srv', (hnd) => {
 		utils.log('Using fsp-srv handle: 0x' + hnd.toString(16));
@@ -442,6 +441,8 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 			}); 
 		}
 	});
+	*/
+	utils.log("reached end of dumpTitle()");
 };
 
 if (true) {
@@ -450,4 +451,3 @@ if (true) {
 	var TITLE_STORAGE = STORAGE_GAMECARD;
 	dumpTitle(TITLE_ID, TITLE_TYPE, TITLE_STORAGE);
 }
-*/
