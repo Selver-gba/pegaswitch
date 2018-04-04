@@ -336,8 +336,8 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 			)
 			.aDescriptor(buf, buf1_sz)
 			.aDescriptor(buf2, buf2_sz);
-		// 
-		setPermissionsMessage.show().sendTo(fsppr).assertOk().show();
+		//setPermissionsMessage.show().sendTo(fsppr).assertOk().show();
+		setPermissionsMessage.sendTo(fsppr).show().assertOk();
 		sc.free(buf);
 	});
 	
@@ -351,7 +351,6 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 			var metaRecord = new Uint32Array(4);
 			for (var i = 0; i < 4; i++) {
 				metaRecord[i] = res.data[i];
-				utils.log('metaRecord[i] == 0x' + metaRecord[i].toString(16));
 			}
 
 			// var nca_id = GetEntryContentNcaId(meta_record, TITLE_TYPE);
@@ -379,7 +378,6 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		nca_id_str += '.nca';
 	}
 	utils.log('Found NCA: '+nca_id_str);
-	/*
 	// Get handle to SD card
 	sc.getService('fsp-srv', (hnd) => {
 		utils.log('Using fsp-srv handle: 0x' + hnd.toString(16));
@@ -448,7 +446,6 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 			}); 
 		}
 	});
-	*/
 	utils.log("reached end of dumpTitle()");
 };
 
