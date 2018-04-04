@@ -5,11 +5,11 @@ sc.getFSPPR = function () {
 		return;
 	}
 	sc.enableTurbo();
-	let i = 0;
-	let srv = null;
+	var i = 0;
+	var srv = null;
 	while (true) {
 		sc.ipcMsg(2).setType(5).sendTo('pm:shell');
-		let srvResult = sc.getService("fsp-pr");
+		var srvResult = sc.getService("fsp-pr");
 		if(srvResult.isOk) {
 			srv = srvResult.getValue();
 			break;
@@ -316,7 +316,7 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		// Msg   1 == ClearFsPermissions(u64 pid) -- clear any existing permissions this PID might have to that title...
 		sc.ipcMsg(1).data(pid).sendTo(fsppr).assertOk().show();
 		// Create the message.  Allows me to dump this message to console as needed....
-		let setPermissionsMessage = 
+		var setPermissionsMessage = 
 		sc
 			.ipcMsg(0)
 			.data(
@@ -336,14 +336,14 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 	});
 
 	// Get the desired NCA ID
-	let nca_id = new Uint32Array(4);
+	var nca_id = new Uint32Array(4);
 	sc.ipcMsg(5).datau32(titleStorage).sendTo('ncm').asResult().andThen(res => {
 		sc.withHandle(res.movedHandles[0], function(hnd) {
 			
 			// var meta_record = GetMetaRecord(TITLE_ID);
-			let res = sc.ipcMsg(6).datau64(utils.parseAddr(titleId)).sendTo(hnd).assertOk();
-			let metaRecord = new Uint32Array(4);
-			for (let i = 0; i < 4; i++) {
+			var res = sc.ipcMsg(6).datau64(utils.parseAddr(titleId)).sendTo(hnd).assertOk();
+			var metaRecord = new Uint32Array(4);
+			for (var i = 0; i < 4; i++) {
 				metaRecord[i] = res.data[i];
 				utils.log('metaRecord[i] == 0x' + metaRecord[i].toString(16));
 			}
@@ -351,14 +351,14 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 			// var nca_id = GetEntryContentNcaId(meta_record, TITLE_TYPE);
 			// HACKHACK -- padding zero after title_type?? (maybe to get 64-bit alignment for res.data[] ???)
 			res = sc.ipcMsg(3).datau32(titleType, 0, res.data[0], res.data[1], res.data[2], res.data[3]).sendTo(hnd).assertOk();
-			for (let i = 0; i < 4; i++) {
+			for (var i = 0; i < 4; i++) {
 				nca_id[i] = res.data[i];
 			}
 		});
 	});
 
 	// Get NCA string for pretty printing.
-	let nca_id_str = '';
+	var nca_id_str = '';
 	if (true) {
 		for (var i = 0; i < 4; i++) {
 			var val = nca_id[i];
@@ -445,9 +445,9 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 };
 
 if (true) {
-	let TITLE_ID = '01007EF00011E000';
-	let TITLE_TYPE = TYPE_PROGRAM;
-	let TITLE_STORAGE = STORAGE_GAMECARD;
+	var TITLE_ID = '01007EF00011E000';
+	var TITLE_TYPE = TYPE_PROGRAM;
+	var TITLE_STORAGE = STORAGE_GAMECARD;
 	dumpTitle(TITLE_ID, TITLE_TYPE, TITLE_STORAGE);
 }
 */
