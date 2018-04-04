@@ -199,7 +199,7 @@ openReadFile = function(ifs_hnd, path) {
 	return sc.ipcMsg(8).datau32(1).xDescriptor(pbuf, pbuf.byteLength, 0).sendTo(ifs_hnd).show().asResult().map((r) => r.movedHandles[0]).getValue();
 };
 
-/* define enums */
+// define enums
 const TYPE_CNMT = 0;
 const TYPE_PROGRAM = 1;
 const TYPE_DATA = 2;
@@ -214,8 +214,9 @@ const STORAGE_NANDSYS = 3;
 const STORAGE_NANDUSER = 4;
 const STORAGE_SDCARD = 5;
 
-/* Configure these as desired. */
-/* See, for example, http://switchbrew.org/index.php?title=Title_list/Games */
+/*
+// Configure these as desired.
+// See, for example, http://switchbrew.org/index.php?title=Title_list/Games
 const TITLE_ID_NAMES = {
 	'0100000000010000' : 'Super Mario Odyssey™',
 	'01000A10041EA000' : 'The Elder Scrolls V: Skyrim',
@@ -243,7 +244,7 @@ const TITLE_ID_NAMES = {
 };
 
 
-/* Actual function start... Maybe wrap this in another function? */
+// Actual function start...
 dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPartitionInput) {
 	const titleId = titleIdInput;
 	const titleType = titleTypeInput;
@@ -334,7 +335,7 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		sc.free(buf);
 	});
 
-	/* Get the desired NCA ID */
+	// Get the desired NCA ID
 	let nca_id = new Uint32Array(4);
 	sc.ipcMsg(5).datau32(titleStorage).sendTo('ncm').asResult().andThen(res => {
 		sc.withHandle(res.movedHandles[0], function(hnd) {
@@ -342,7 +343,7 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 			// var meta_record = GetMetaRecord(TITLE_ID);
 			let res = sc.ipcMsg(6).datau64(utils.parseAddr(titleId)).sendTo(hnd).assertOk();
 			let metaRecord = new Uint32Array(4);
-			for (var i = 0; i < 4; i++) {
+			for (let i = 0; i < 4; i++) {
 				metaRecord[i] = res.data[i];
 				utils.log('metaRecord[i] == 0x' + metaRecord[i].toString(16));
 			}
@@ -350,7 +351,7 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 			// var nca_id = GetEntryContentNcaId(meta_record, TITLE_TYPE);
 			// HACKHACK -- padding zero after title_type?? (maybe to get 64-bit alignment for res.data[] ???)
 			res = sc.ipcMsg(3).datau32(titleType, 0, res.data[0], res.data[1], res.data[2], res.data[3]).sendTo(hnd).assertOk();
-			for (var i = 0; i < 4; i++) {
+			for (let i = 0; i < 4; i++) {
 				nca_id[i] = res.data[i];
 			}
 		});
@@ -449,3 +450,4 @@ if (true) {
 	let TITLE_STORAGE = STORAGE_GAMECARD;
 	dumpTitle(TITLE_ID, TITLE_TYPE, TITLE_STORAGE);
 }
+*/
