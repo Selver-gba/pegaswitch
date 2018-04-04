@@ -245,9 +245,9 @@ const TITLE_ID_NAMES = {
 
 // Actual function start...
 dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPartitionInput) {
-	const titleId = titleIdInput;
-	const titleType = titleTypeInput;
-	const titleStorage = titleStorageInput;
+	var titleId = titleIdInput;
+	var titleType = titleTypeInput;
+	var titleStorage = titleStorageInput;
 	if (true) { // parameter validation
 		if (arguments.length !== 3) {
 			const errMsg = 'dumpTitle requires three arguments';
@@ -271,7 +271,7 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 		}
 	} // end parameter validation
 	// default gamecard partition is 2 (secure)
-	const gamecardParititon = (
+	var gamecardParititon = (
 		(titleStorage === 2) && // titleStorage is the gamecard...
 		(arguments.length >= 4) && // and argument was provided for gamecardPartitionInput
 		(gamecardPartitionInput.constructor === Number) && // and that argument was a number
