@@ -1,5 +1,4 @@
 // 'use strict';
-
 sc.getFSPPR = function () {
 	if (sc.closed_pr !== undefined) {
 		return;
@@ -245,8 +244,7 @@ const TITLE_ID_NAMES = {
 
 // Actual function start...
 dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPartitionInput) {
-	utils.log('');
-	utils.log('dumpTitle() entry')
+	utils.log('-----> dumpTitle entry');
 
 	const titleId = titleIdInput;
 	const titleType = titleTypeInput;
@@ -446,12 +444,12 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 			}); 
 		}
 	});
-	utils.log("reached end of dumpTitle()");
+	utils.log("<----- dumpTitle end");
 };
 
 if (true) {
-	var TITLE_ID = '01007EF00011E000';
-	var TITLE_TYPE = TYPE_PROGRAM;
-	var TITLE_STORAGE = STORAGE_GAMECARD;
-	dumpTitle(TITLE_ID, TITLE_TYPE, TITLE_STORAGE);
+	var titleToDump  = '01007EF00011E000';
+	dumpTitle(titleToDump, TYPE_PROGRAM, STORAGE_GAMECARD, 0);
+	dumpTitle(titleToDump, TYPE_PROGRAM, STORAGE_GAMECARD, 1);
+//	dumpTitle(titleToDump, TYPE_PROGRAM, STORAGE_GAMECARD, 2); // default
 }
