@@ -250,7 +250,7 @@ dumpTitle = function(titleIdInput, titleTypeInput, titleStorageInput, gamecardPa
 	const titleType = titleTypeInput;
 	const titleStorage = titleStorageInput;
 	if (true) { // parameter validation
-		if (arguments.length !== 3) {
+		if (arguments.length < 3) {
 			const errMsg = 'dumpTitle requires three arguments';
 			utils.log(errMsg); throw new Error(errMsg);		
 		}
